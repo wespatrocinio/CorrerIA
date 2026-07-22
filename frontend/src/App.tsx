@@ -4,6 +4,7 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import { AuthProvider } from './AuthContext';
 import RotaProtegida from './components/RotaProtegida';
 import Bootstrap from './pages/Bootstrap';
+import Conta from './pages/Conta';
 import EditarCiclo from './pages/EditarCiclo';
 import EditarTreino from './pages/EditarTreino';
 import Login from './pages/Login';
@@ -28,6 +29,7 @@ export default function App() {
             <Route path="/login" element={<Login />} />
             <Route path="/registro" element={<Registro />} />
             <Route path="/" element={protegida(<Bootstrap />)} />
+            <Route path="/conta" element={protegida(<Conta />)} />
             <Route path="/onboarding" element={protegida(<Onboarding />)} />
             <Route path="/objetivo-ciclo" element={protegida(<ObjetivoCiclo />)} />
             <Route path="/ciclo/:cicloId" element={protegida(<VisaoCiclo />)} />

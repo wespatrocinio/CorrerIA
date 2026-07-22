@@ -9,6 +9,12 @@ export interface Corredor {
   faixa_moderado: string;
   faixa_forte: string;
   faixa_muito_forte: string;
+  nome: string | null;
+  sobrenome: string | null;
+  data_nascimento: string | null;
+  altura_cm: number | null;
+  peso_kg: number | null;
+  genero: string | null;
 }
 
 export interface Objetivo {

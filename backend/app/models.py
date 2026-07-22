@@ -30,6 +30,13 @@ class Corredor(SQLModel, table=True):
     faixa_moderado: str
     faixa_forte: str
     faixa_muito_forte: str
+    # Dados pessoais — opcionais, preenchidos na tela de conta (não fazem parte do onboarding).
+    nome: Optional[str] = None
+    sobrenome: Optional[str] = None
+    data_nascimento: Optional[date] = None
+    altura_cm: Optional[float] = None
+    peso_kg: Optional[float] = None
+    genero: Optional[str] = None
 
 
 class Objetivo(SQLModel, table=True):

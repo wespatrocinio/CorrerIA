@@ -22,6 +22,17 @@ export function hojeISO(): string {
   return new Date().toISOString().slice(0, 10);
 }
 
+export function calcularIdade(dataNascimentoISO: string): number {
+  const hoje = new Date();
+  const nascimento = new Date(`${dataNascimentoISO}T00:00:00`);
+  let idade = hoje.getFullYear() - nascimento.getFullYear();
+  const aindaNaoFezAniversarioEsteAno =
+    hoje.getMonth() < nascimento.getMonth() ||
+    (hoje.getMonth() === nascimento.getMonth() && hoje.getDate() < nascimento.getDate());
+  if (aindaNaoFezAniversarioEsteAno) idade -= 1;
+  return idade;
+}
+
 export const CATEGORIA_COR: Record<string, string> = {
   bloco_unico: 'cor-bloco-unico',
   aquecimento_principal_desaquecimento: 'cor-tempo-run',

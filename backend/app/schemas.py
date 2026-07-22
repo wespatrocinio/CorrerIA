@@ -21,6 +21,11 @@ class TokenResponse(BaseModel):
     token_type: str = "bearer"
 
 
+class TrocarSenhaRequest(BaseModel):
+    senha_atual: str
+    nova_senha: str
+
+
 # --- Corredor ---
 
 class CorredorRequest(BaseModel):
@@ -33,6 +38,21 @@ class CorredorRequest(BaseModel):
 
 class CorredorResponse(CorredorRequest):
     id: str
+    nome: Optional[str] = None
+    sobrenome: Optional[str] = None
+    data_nascimento: Optional[date] = None
+    altura_cm: Optional[float] = None
+    peso_kg: Optional[float] = None
+    genero: Optional[str] = None
+
+
+class PerfilPessoalRequest(BaseModel):
+    nome: Optional[str] = None
+    sobrenome: Optional[str] = None
+    data_nascimento: Optional[date] = None
+    altura_cm: Optional[float] = None
+    peso_kg: Optional[float] = None
+    genero: Optional[str] = None
 
 
 # --- Objetivo / Ciclo ---

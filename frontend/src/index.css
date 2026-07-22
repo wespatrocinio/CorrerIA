@@ -13,6 +13,7 @@
   --cor-intensidade: #c0392b;
   --cor-customizado: #6b5b95;
   --cor-erro: #c0392b;
+  --cor-sucesso: #2f6f4e;
 }
 
 * { box-sizing: border-box; }
@@ -31,6 +32,7 @@ h1 { font-size: 20px; margin: 0 0 4px; }
 .rotulo-campo { display: block; font-size: 13px; font-weight: 600; margin: 16px 0 6px; }
 .aviso-data-inicio { color: var(--cor-texto-suave); font-size: 12px; margin: 6px 0 0; }
 .mensagem-erro { color: var(--cor-erro); font-size: 13px; margin: 8px 0 0; }
+.mensagem-sucesso { color: var(--cor-sucesso); font-size: 13px; margin: 8px 0 0; }
 
 input[type="text"], input[type="date"], input[type="number"], input[type="email"], input[type="password"], textarea {
   width: 100%;
@@ -239,3 +241,14 @@ select.input-select {
 .campos-realizacao { margin-top: 12px; }
 
 .tela-carregando { text-align: center; padding: 40px 0; color: var(--cor-texto-suave); }
+
+/* Conta */
+.tela-conta { text-align: left; }
+.secao-conta {
+  background: var(--cor-cartao);
+  border: 1px solid var(--cor-borda);
+  border-radius: 10px;
+  padding: 16px;
+  margin-top: 20px;
+}
+.subtitulo-secao { font-size: 16px; margin: 0; }

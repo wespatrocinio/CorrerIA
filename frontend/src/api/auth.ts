@@ -26,3 +26,10 @@ export async function login(email: string, senha: string): Promise<string> {
 export function logout() {
   setToken(null);
 }
+
+export function trocarSenha(senhaAtual: string, novaSenha: string): Promise<void> {
+  return apiFetch<void>('/auth/senha', {
+    method: 'PUT',
+    body: JSON.stringify({ senha_atual: senhaAtual, nova_senha: novaSenha }),
+  });
+}

@@ -90,6 +90,9 @@ export default function VisaoCiclo() {
       <Link to="/onboarding" className="btn btn-secundario" style={{ textAlign: 'center', textDecoration: 'none', display: 'block' }}>
         Editar faixas de ritmo
       </Link>
+      <Link to="/conta" className="btn btn-secundario" style={{ textAlign: 'center', textDecoration: 'none', display: 'block' }}>
+        Minha conta
+      </Link>
     </div>
   );
 }
