@@ -11,7 +11,12 @@ export function listarCiclos() {
   return apiFetch<Ciclo[]>('/ciclos');
 }
 
-export function criarCiclo(dados: { objetivo: ObjetivoInput; data_inicio: string; duracao_semanas: number }) {
+export function criarCiclo(dados: {
+  objetivo: ObjetivoInput;
+  data_inicio: string;
+  duracao_semanas: number;
+  meta_volume_semanal_km: number | null;
+}) {
   return apiFetch<Ciclo>('/ciclos', { method: 'POST', body: JSON.stringify(dados) });
 }
 

@@ -15,6 +15,7 @@ export default function ObjetivoCiclo() {
   const [dataAlvo, setDataAlvo] = useState('');
   const [dataInicio, setDataInicio] = useState(hojeISO());
   const [duracao, setDuracao] = useState(DURACOES[0]);
+  const [metaVolume, setMetaVolume] = useState('');
   const [erro, setErro] = useState<string | null>(null);
   const [salvando, setSalvando] = useState(false);
   const navigate = useNavigate();
@@ -28,6 +29,7 @@ export default function ObjetivoCiclo() {
         objetivo: { tipo, meta: meta.trim() || null, data_alvo: dataAlvo || null },
         data_inicio: dataInicio,
         duracao_semanas: duracao,
+        meta_volume_semanal_km: metaVolume.trim() ? parseFloat(metaVolume) : null,
       });
       navigate(`/ciclo/${ciclo.id}`, { replace: true });
     } catch (err) {
@@ -83,6 +85,17 @@ export default function ObjetivoCiclo() {
             </button>
           ))}
         </div>
+
+        <label className="rotulo-campo" htmlFor="meta-volume">Meta de volume semanal (km, opcional)</label>
+        <input
+          id="meta-volume"
+          type="number"
+          min={0}
+          step={0.1}
+          placeholder="ex: 40"
+          value={metaVolume}
+          onChange={(e) => setMetaVolume(e.target.value)}
+        />
 
         {erro && <p className="mensagem-erro">{erro}</p>}
 

@@ -71,6 +71,7 @@ class CicloCreateRequest(BaseModel):
     objetivo: ObjetivoInput
     data_inicio: date
     duracao_semanas: int
+    meta_volume_semanal_km: Optional[float] = None
 
 
 class CicloUpdateRequest(BaseModel):

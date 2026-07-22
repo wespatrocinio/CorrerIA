@@ -56,7 +56,12 @@ def criar_ciclo(
     session.add(objetivo)
     session.flush()
 
-    ciclo = Ciclo(objetivo_id=objetivo.id, data_inicio=dados.data_inicio, duracao_semanas=dados.duracao_semanas)
+    ciclo = Ciclo(
+        objetivo_id=objetivo.id,
+        data_inicio=dados.data_inicio,
+        duracao_semanas=dados.duracao_semanas,
+        meta_volume_semanal_km=dados.meta_volume_semanal_km,
+    )
     session.add(ciclo)
     session.flush()
 
