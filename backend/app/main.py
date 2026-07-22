@@ -1,3 +1,4 @@
+import os
 from contextlib import asynccontextmanager
 
 from fastapi import FastAPI
@@ -15,9 +16,18 @@ async def lifespan(app: FastAPI):
 
 app = FastAPI(title="CorrerIA API", lifespan=lifespan)
 
+# CORRERIA_CORS_ORIGINS: lista separada por vírgula (ex: "https://correria.up.railway.app").
+# Sem a variável definida, cai no default de desenvolvimento local (Vite).
+_cors_origins_env = os.environ.get("CORRERIA_CORS_ORIGINS")
+CORS_ORIGINS = (
+    [o.strip() for o in _cors_origins_env.split(",") if o.strip()]
+    if _cors_origins_env
+    else ["http://localhost:5173"]
+)
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:5173"],
+    allow_origins=CORS_ORIGINS,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],

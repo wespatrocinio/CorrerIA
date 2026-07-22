@@ -1,4 +1,6 @@
-const API_BASE = 'http://localhost:8000/api';
+// Em produção, defina VITE_API_URL no ambiente de build do Railway (ex: https://api.correria.up.railway.app/api).
+// Sem a variável, cai no backend local usado em desenvolvimento.
+const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:8000/api';
 const TOKEN_KEY = 'correria_token';
 
 export class ApiError extends Error {
