@@ -28,6 +28,7 @@ export const TEMPLATES_POR_TIPO: Record<string, string> = {
   Fartlek: 'aquecimento_loop_desaquecimento',
   VO2: 'aquecimento_loop_desaquecimento',
   Customizado: 'customizado',
+  Descanso: 'descanso',
 };
 
 export function criarBlocosPadrao(template: string): Bloco[] {

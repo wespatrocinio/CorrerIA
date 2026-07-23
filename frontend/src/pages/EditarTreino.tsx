@@ -6,9 +6,9 @@ import { atualizarTreino, criarTreino } from '../api/treinos';
 import { criarBlocosPadrao, novoBlocoCustomizado, TEMPLATES_POR_TIPO } from '../blocos';
 import BarraTopo from '../components/BarraTopo';
 import type { Bloco, CategoriaRealizacao, Corredor, Nivel, StatusTreino, Treino } from '../types';
-import { formatarData, formatarMin, textoIntervalo, totalTreino } from '../utils';
+import { formatarData, formatarMin, labelTipoBloco, textoIntervalo, totalTreino } from '../utils';
 
-const TIPOS_TREINO = ['Regenerativo', 'Rodagem leve', 'Tempo run', 'Longo', 'Fartlek', 'VO2', 'Customizado'];
+const TIPOS_TREINO = ['Regenerativo', 'Rodagem leve', 'Tempo run', 'Longo', 'Fartlek', 'VO2', 'Customizado', 'Descanso'];
 
 const NIVEIS_INTENSIDADE: { nivel: Nivel; label: string }[] = [
   { nivel: 'aquecimento_desaquecimento', label: 'Aquec./Desaq.' },
@@ -23,17 +23,6 @@ const CATEGORIAS_REALIZACAO: { valor: CategoriaRealizacao; label: string }[] = [
   { valor: 'melhor_que_planejado', label: 'Melhor que o planejado' },
   { valor: 'aquem_do_planejado', label: 'Aquém do planejado' },
 ];
-
-function labelTipoBloco(tipo: Bloco['tipo']): string {
-  const labels: Record<Bloco['tipo'], string> = {
-    aquecimento: 'Aquecimento',
-    principal: 'Principal',
-    recuperacao: 'Recuperação',
-    desaquecimento: 'Desaquecimento',
-    repeticao: 'Repetição',
-  };
-  return labels[tipo] ?? tipo;
-}
 
 export default function EditarTreino() {
   const { cicloId, semanaId, diaId } = useParams<{ cicloId: string; semanaId: string; diaId: string }>();
@@ -86,7 +75,11 @@ export default function EditarTreino() {
   }
 
   function voltarSemSalvar() {
-    navigate(`/ciclo/${cicloId}/semana/${semanaId}`);
+    if (treinoOriginalId) {
+      navigate(`/ciclo/${cicloId}/semana/${semanaId}/dia/${diaId}`);
+    } else {
+      navigate(`/ciclo/${cicloId}/semana/${semanaId}`);
+    }
   }
 
   async function salvar() {
@@ -110,7 +103,7 @@ export default function EditarTreino() {
         observacoes: draft.observacoes,
         blocos: draft.blocos,
       });
-      navigate(`/ciclo/${cicloId}/semana/${semanaId}`, { replace: true });
+      navigate(`/ciclo/${cicloId}/semana/${semanaId}/dia/${diaId}`, { replace: true });
     } catch (err) {
       setErro(err instanceof Error ? err.message : 'Erro ao salvar');
       setSalvando(false);
@@ -186,22 +179,24 @@ export default function EditarTreino() {
             Trocar tipo de treino
           </button>
         </div>
-        <div className="seletor-contexto">
-          <button
-            type="button"
-            className={`chip ${draft.contexto === 'rua' ? 'chip-selecionado' : ''}`}
-            onClick={() => setDraft({ ...draft, contexto: 'rua' })}
-          >
-            Rua (ritmo)
-          </button>
-          <button
-            type="button"
-            className={`chip ${draft.contexto === 'esteira' ? 'chip-selecionado' : ''}`}
-            onClick={() => setDraft({ ...draft, contexto: 'esteira' })}
-          >
-            Esteira (velocidade)
-          </button>
-        </div>
+        {draft.tipo !== 'Descanso' && (
+          <div className="seletor-contexto">
+            <button
+              type="button"
+              className={`chip ${draft.contexto === 'rua' ? 'chip-selecionado' : ''}`}
+              onClick={() => setDraft({ ...draft, contexto: 'rua' })}
+            >
+              Rua (ritmo)
+            </button>
+            <button
+              type="button"
+              className={`chip ${draft.contexto === 'esteira' ? 'chip-selecionado' : ''}`}
+              onClick={() => setDraft({ ...draft, contexto: 'esteira' })}
+            >
+              Esteira (velocidade)
+            </button>
+          </div>
+        )}
       </div>
 
       <div className="lista-blocos">

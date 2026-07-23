@@ -100,7 +100,8 @@ function LinhaDia({ dia, onClicar }: { dia: Dia; onClicar: () => void }) {
 
   const treino = dia.treino;
   const corCategoria = CATEGORIA_COR[treino.template_estrutural];
-  const iconeContexto = treino.contexto === 'esteira' ? '🏠' : '🛣️';
+  const ehDescanso = treino.template_estrutural === 'descanso';
+  const iconeContexto = ehDescanso ? '😴' : treino.contexto === 'esteira' ? '🏠' : '🛣️';
 
   return (
     <div className="linha-dia clicavel" onClick={onClicar}>

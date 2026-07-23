@@ -13,6 +13,7 @@ import Onboarding from './pages/Onboarding';
 import Registro from './pages/Registro';
 import VisaoCiclo from './pages/VisaoCiclo';
 import VisaoSemana from './pages/VisaoSemana';
+import VisualizarTreino from './pages/VisualizarTreino';
 
 const queryClient = new QueryClient();
 
@@ -35,7 +36,8 @@ export default function App() {
             <Route path="/ciclo/:cicloId" element={protegida(<VisaoCiclo />)} />
             <Route path="/ciclo/:cicloId/editar" element={protegida(<EditarCiclo />)} />
             <Route path="/ciclo/:cicloId/semana/:semanaId" element={protegida(<VisaoSemana />)} />
-            <Route path="/ciclo/:cicloId/semana/:semanaId/dia/:diaId" element={protegida(<EditarTreino />)} />
+            <Route path="/ciclo/:cicloId/semana/:semanaId/dia/:diaId" element={protegida(<VisualizarTreino />)} />
+            <Route path="/ciclo/:cicloId/semana/:semanaId/dia/:diaId/editar" element={protegida(<EditarTreino />)} />
           </Routes>
         </BrowserRouter>
       </AuthProvider>

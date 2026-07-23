@@ -38,7 +38,19 @@ export const CATEGORIA_COR: Record<string, string> = {
   aquecimento_principal_desaquecimento: 'cor-tempo-run',
   aquecimento_loop_desaquecimento: 'cor-intensidade',
   customizado: 'cor-customizado',
+  descanso: 'cor-descanso',
 };
+
+export function labelTipoBloco(tipo: Bloco['tipo']): string {
+  const labels: Record<Bloco['tipo'], string> = {
+    aquecimento: 'Aquecimento',
+    principal: 'Principal',
+    recuperacao: 'Recuperação',
+    desaquecimento: 'Desaquecimento',
+    repeticao: 'Repetição',
+  };
+  return labels[tipo] ?? tipo;
+}
 
 const DIAS_SEMANA_LABEL = ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb'];
 

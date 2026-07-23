@@ -21,6 +21,7 @@ TEMPLATES_POR_TIPO = {
     "Fartlek": "aquecimento_loop_desaquecimento",
     "VO2": "aquecimento_loop_desaquecimento",
     "Customizado": "customizado",
+    "Descanso": "descanso",
 }
 
 CAMPO_FAIXA = {
