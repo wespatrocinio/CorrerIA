@@ -65,7 +65,12 @@ export type CategoriaRealizacao = 'como_planejado' | 'melhor_que_planejado' | 'a
 export interface Treino {
   id: string;
   tipo: string;
-  template_estrutural: 'bloco_unico' | 'aquecimento_principal_desaquecimento' | 'aquecimento_loop_desaquecimento' | 'customizado';
+  template_estrutural:
+    | 'bloco_unico'
+    | 'aquecimento_principal_desaquecimento'
+    | 'aquecimento_loop_desaquecimento'
+    | 'customizado'
+    | 'descanso';
   contexto: 'rua' | 'esteira';
   status: StatusTreino;
   realizacao_categoria: CategoriaRealizacao | null;
