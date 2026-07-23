@@ -1,7 +1,9 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { Link, useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { listarSemanas, obterCiclo } from '../api/ciclos';
 import { duplicarSemana } from '../api/semanas';
+import BarraTopo from '../components/BarraTopo';
+import MenuAcoes from '../components/MenuAcoes';
 import type { SemanaResumo } from '../types';
 import { deltaVolumeSemana, formatarData, formatarMin } from '../utils';
 
@@ -49,6 +51,18 @@ export default function VisaoCiclo() {
 
   return (
     <div className="tela tela-visao-ciclo">
+      <BarraTopo
+        mostrarHome={false}
+        menu={
+          <MenuAcoes
+            itens={[
+              { label: 'Editar objetivo e ciclo', to: `/ciclo/${cicloId}/editar` },
+              { label: 'Editar faixas de ritmo', to: '/onboarding' },
+              { label: 'Minha conta', to: '/conta' },
+            ]}
+          />
+        }
+      />
       <div className="cabecalho-ciclo">
         <h1>
           {ciclo.objetivo.tipo}
@@ -83,16 +97,6 @@ export default function VisaoCiclo() {
           />
         ))}
       </div>
-
-      <button className="btn btn-secundario" onClick={() => navigate(`/ciclo/${cicloId}/editar`)}>
-        Editar objetivo e ciclo
-      </button>
-      <Link to="/onboarding" className="btn btn-secundario" style={{ textAlign: 'center', textDecoration: 'none', display: 'block' }}>
-        Editar faixas de ritmo
-      </Link>
-      <Link to="/conta" className="btn btn-secundario" style={{ textAlign: 'center', textDecoration: 'none', display: 'block' }}>
-        Minha conta
-      </Link>
     </div>
   );
 }

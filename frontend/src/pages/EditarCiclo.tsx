@@ -1,6 +1,7 @@
 import { useEffect, useState, type FormEvent } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { atualizarCiclo, obterCiclo } from '../api/ciclos';
+import BarraTopo from '../components/BarraTopo';
 
 const TIPOS_OBJETIVO = ['Prova', 'Completar uma distância', 'Recorde pessoal', 'Queimar calorias', 'Outro'];
 
@@ -58,6 +59,7 @@ export default function EditarCiclo() {
 
   return (
     <div className="tela tela-objetivo-ciclo">
+      <BarraTopo />
       <h1>Editar objetivo e ciclo</h1>
       <form onSubmit={salvar}>
         <label className="rotulo-campo">Objetivo</label>

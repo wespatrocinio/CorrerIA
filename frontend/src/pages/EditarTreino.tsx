@@ -4,6 +4,7 @@ import { obterCorredor } from '../api/corredor';
 import { obterSemana } from '../api/semanas';
 import { atualizarTreino, criarTreino } from '../api/treinos';
 import { criarBlocosPadrao, novoBlocoCustomizado, TEMPLATES_POR_TIPO } from '../blocos';
+import BarraTopo from '../components/BarraTopo';
 import type { Bloco, CategoriaRealizacao, Corredor, Nivel, StatusTreino, Treino } from '../types';
 import { formatarData, formatarMin, textoIntervalo, totalTreino } from '../utils';
 
@@ -121,6 +122,7 @@ export default function EditarTreino() {
   if (!draft) {
     return (
       <div className="tela tela-escolha-tipo">
+        <BarraTopo />
         <h1>
           {formatarData(dataDia)} · {treinoOriginalId ? 'Trocar tipo de treino' : 'Novo treino'}
         </h1>
@@ -175,6 +177,7 @@ export default function EditarTreino() {
 
   return (
     <div className="tela tela-editar-treino">
+      <BarraTopo />
       <div className="cabecalho-treino">
         <div>
           <h1>{formatarData(dataDia)}</h1>

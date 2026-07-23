@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { logout, trocarSenha } from '../api/auth';
 import { obterCorredor, salvarPerfilPessoal } from '../api/corredor';
 import { useAuth } from '../AuthContext';
+import BarraTopo from '../components/BarraTopo';
 import { calcularIdade } from '../utils';
 
 const GENEROS = ['Masculino', 'Feminino', 'Outro', 'Prefiro não informar'];
@@ -103,6 +104,7 @@ export default function Conta() {
 
   return (
     <div className="tela tela-conta">
+      <BarraTopo />
       <h1>Minha conta</h1>
 
       <section className="secao-conta">

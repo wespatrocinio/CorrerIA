@@ -2,6 +2,7 @@ import { useQuery } from '@tanstack/react-query';
 import { useNavigate, useParams } from 'react-router-dom';
 import { listarSemanas } from '../api/ciclos';
 import { obterSemana } from '../api/semanas';
+import BarraTopo from '../components/BarraTopo';
 import type { Dia } from '../types';
 import { CATEGORIA_COR, formatarData, formatarMin, labelCategoriaRealizacao, labelDiaSemana } from '../utils';
 
@@ -36,6 +37,7 @@ export default function VisaoSemana() {
 
   return (
     <div className="tela tela-visao-semana">
+      <BarraTopo />
       <div className="nav-semana">
         <button
           className="btn btn-icone"

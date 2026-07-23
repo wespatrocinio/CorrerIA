@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { listarCiclos } from '../api/ciclos';
 import { ApiError } from '../api/client';
 import { obterCorredor, salvarCorredor } from '../api/corredor';
+import BarraTopo from '../components/BarraTopo';
 
 interface FaixaConfig {
   nivel: 'aquecimento_desaquecimento' | 'leve' | 'moderado' | 'forte' | 'muito_forte';
@@ -81,6 +82,7 @@ export default function Onboarding() {
 
   return (
     <div className="tela tela-onboarding">
+      <BarraTopo />
       <h1>Suas faixas de ritmo</h1>
       <p className="subtitulo">
         Já preenchemos com valores de referência para iniciante. Pode aceitar como está ou ajustar livremente.

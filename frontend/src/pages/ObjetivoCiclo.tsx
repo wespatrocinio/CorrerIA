@@ -1,6 +1,7 @@
 import { useState, type FormEvent } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { criarCiclo } from '../api/ciclos';
+import BarraTopo from '../components/BarraTopo';
 
 const TIPOS_OBJETIVO = ['Prova', 'Completar uma distância', 'Recorde pessoal', 'Queimar calorias', 'Outro'];
 const DURACOES = [8, 12, 16];
@@ -41,6 +42,7 @@ export default function ObjetivoCiclo() {
 
   return (
     <div className="tela tela-objetivo-ciclo">
+      <BarraTopo />
       <h1>Criar objetivo e ciclo</h1>
       <form onSubmit={aoSubmeter}>
         <label className="rotulo-campo">Objetivo</label>
