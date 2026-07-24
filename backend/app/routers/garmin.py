@@ -1,4 +1,5 @@
 import json
+from datetime import datetime
 from typing import Optional
 
 from fastapi import APIRouter, Depends, HTTPException, status
@@ -7,8 +8,15 @@ from sqlmodel import Session, select
 from ..database import get_session
 from ..deps import get_corredor_atual
 from ..garmin import ErroGarmin, buscar_atividade, montar_execucao
-from ..models import Corredor, ExecucaoGarmin
-from ..schemas import ExecucaoGarminOutput, GarminSplitOutput, GarminUrlRequest, GarminZonaFcOutput
+from ..ia import gerar_analise
+from ..models import Bloco, Corredor, ExecucaoGarmin
+from ..schemas import (
+    ExecucaoGarminOutput,
+    GarminAlertaOutput,
+    GarminSplitOutput,
+    GarminUrlRequest,
+    GarminZonaFcOutput,
+)
 from .treinos import _validar_treino_do_corredor
 
 router = APIRouter()
@@ -17,6 +25,7 @@ router = APIRouter()
 def _execucao_output(execucao: ExecucaoGarmin) -> ExecucaoGarminOutput:
     splits_raw = json.loads(execucao.splits_json) if execucao.splits_json else []
     zonas_raw = json.loads(execucao.zonas_fc_json) if execucao.zonas_fc_json else []
+    alertas_raw = json.loads(execucao.alertas_json) if execucao.alertas_json else []
     return ExecucaoGarminOutput(
         id=execucao.id,
         treino_id=execucao.treino_id,
@@ -51,6 +60,9 @@ def _execucao_output(execucao: ExecucaoGarmin) -> ExecucaoGarminOutput:
             for z in zonas_raw
         ],
         criado_em=execucao.criado_em,
+        analise_texto=execucao.analise_texto,
+        alertas=[GarminAlertaOutput(**a) for a in alertas_raw],
+        analisado_em=execucao.analisado_em,
     )
 
 
@@ -90,4 +102,34 @@ def obter_garmin(
     execucao = session.exec(select(ExecucaoGarmin).where(ExecucaoGarmin.treino_id == treino.id)).first()
     if not execucao:
         return None
+    return _execucao_output(execucao)
+
+
+@router.post("/treinos/{treino_id}/garmin/analise", response_model=ExecucaoGarminOutput)
+def analisar_com_ia(
+    treino_id: str,
+    corredor: Corredor = Depends(get_corredor_atual),
+    session: Session = Depends(get_session),
+):
+    treino = _validar_treino_do_corredor(session, corredor, treino_id)
+    execucao = session.exec(select(ExecucaoGarmin).where(ExecucaoGarmin.treino_id == treino.id)).first()
+    if not execucao:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Sincronize com o Garmin antes de pedir a análise.",
+        )
+
+    blocos = session.exec(select(Bloco).where(Bloco.treino_id == treino.id)).all()
+
+    try:
+        resultado = gerar_analise(corredor, treino, blocos, execucao)
+    except Exception as e:
+        raise HTTPException(status_code=status.HTTP_502_BAD_GATEWAY, detail=f"Erro ao gerar análise: {e}")
+
+    execucao.analise_texto = resultado["analise_texto"]
+    execucao.alertas_json = json.dumps(resultado["alertas"])
+    execucao.analisado_em = datetime.utcnow()
+    session.add(execucao)
+    session.commit()
+    session.refresh(execucao)
     return _execucao_output(execucao)

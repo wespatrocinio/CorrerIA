@@ -425,3 +425,15 @@ select.input-select {
 }
 .zona-fc-linha:last-child, .split-garmin-linha:last-child { border-bottom: none; }
 .secao-garmin .btn-link { display: inline-block; margin: 10px 0; }
+.secao-analise-ia { margin-top: 14px; }
+.alertas-ia { display: flex; flex-direction: column; gap: 8px; margin: 8px 0; }
+.alerta-ia {
+  font-size: 13px;
+  padding: 8px 10px;
+  border-radius: 8px;
+  border-left: 3px solid var(--cor-borda);
+}
+.alerta-ia-alta { background: rgba(220, 53, 69, 0.1); border-left-color: #dc3545; }
+.alerta-ia-media { background: rgba(255, 193, 7, 0.12); border-left-color: #ffc107; }
+.alerta-ia-baixa { background: var(--cor-fundo); }
+.texto-analise-ia { font-size: 14px; color: var(--cor-texto-suave); line-height: 1.5; margin: 8px 0; }

@@ -1,7 +1,7 @@
 import { useEffect, useState, type FormEvent } from 'react';
 import { Navigate, useNavigate, useParams } from 'react-router-dom';
 import { obterCorredor } from '../api/corredor';
-import { obterExecucaoGarmin, sincronizarGarmin } from '../api/garmin';
+import { analisarComIA, obterExecucaoGarmin, sincronizarGarmin } from '../api/garmin';
 import { obterSemana } from '../api/semanas';
 import BarraTopo from '../components/BarraTopo';
 import InfoTreino from '../components/InfoTreino';
@@ -213,6 +213,21 @@ function SecaoGarmin({
   const [sincronizando, setSincronizando] = useState(false);
   const [erro, setErro] = useState<string | null>(null);
   const [mostrarForm, setMostrarForm] = useState(false);
+  const [analisando, setAnalisando] = useState(false);
+  const [erroAnalise, setErroAnalise] = useState<string | null>(null);
+
+  async function analisar() {
+    setErroAnalise(null);
+    setAnalisando(true);
+    try {
+      const resultado = await analisarComIA(treinoId);
+      onSincronizado(resultado);
+    } catch (err) {
+      setErroAnalise(err instanceof Error ? err.message : 'Erro ao gerar análise');
+    } finally {
+      setAnalisando(false);
+    }
+  }
 
   async function sincronizar(e: FormEvent) {
     e.preventDefault();
@@ -333,6 +348,28 @@ function SecaoGarmin({
           ))}
         </div>
       )}
+
+      <div className="secao-analise-ia">
+        <span className="rotulo-campo">Análise de IA</span>
+        {execucao.alertas.length > 0 && (
+          <div className="alertas-ia">
+            {execucao.alertas.map((a, i) => (
+              <div key={i} className={`alerta-ia alerta-ia-${a.severidade}`}>
+                {a.fato}
+              </div>
+            ))}
+          </div>
+        )}
+        {execucao.analise_texto && <p className="texto-analise-ia">{execucao.analise_texto}</p>}
+        {erroAnalise && <p className="mensagem-erro">{erroAnalise}</p>}
+        <button type="button" className="btn btn-secundario" onClick={analisar} disabled={analisando}>
+          {analisando
+            ? 'Analisando com IA...'
+            : execucao.analise_texto
+              ? 'Reanalisar'
+              : 'Analisar com IA'}
+        </button>
+      </div>
 
       <a href={execucao.url} target="_blank" rel="noreferrer" className="btn-link">
         Ver no Garmin Connect

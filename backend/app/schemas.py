@@ -206,6 +206,12 @@ class GarminZonaFcOutput(BaseModel):
     minutos: float
 
 
+class GarminAlertaOutput(BaseModel):
+    severidade: str  # baixa | media | alta
+    tipo: str
+    fato: str
+
+
 class ExecucaoGarminOutput(BaseModel):
     id: str
     treino_id: str
@@ -225,3 +231,6 @@ class ExecucaoGarminOutput(BaseModel):
     splits: List[GarminSplitOutput] = []
     zonas_fc: List[GarminZonaFcOutput] = []
     criado_em: datetime
+    analise_texto: Optional[str] = None
+    alertas: List[GarminAlertaOutput] = []
+    analisado_em: Optional[datetime] = None

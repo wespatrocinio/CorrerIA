@@ -11,3 +11,9 @@ export function sincronizarGarmin(treinoId: string, url: string) {
     body: JSON.stringify({ url }),
   });
 }
+
+export function analisarComIA(treinoId: string) {
+  return apiFetch<ExecucaoGarmin>(`/treinos/${treinoId}/garmin/analise`, {
+    method: 'POST',
+  });
+}

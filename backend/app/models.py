@@ -125,3 +125,6 @@ class ExecucaoGarmin(SQLModel, table=True):
     zonas_fc_json: Optional[str] = None
     clima_json: Optional[str] = None
     criado_em: datetime = Field(default_factory=datetime.utcnow)
+    analise_texto: Optional[str] = None
+    alertas_json: Optional[str] = None
+    analisado_em: Optional[datetime] = None

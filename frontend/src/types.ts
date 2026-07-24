@@ -112,6 +112,12 @@ export interface GarminZonaFc {
   minutos: number;
 }
 
+export interface GarminAlerta {
+  severidade: 'baixa' | 'media' | 'alta';
+  tipo: string;
+  fato: string;
+}
+
 export interface ExecucaoGarmin {
   id: string;
   treino_id: string;
@@ -131,4 +137,7 @@ export interface ExecucaoGarmin {
   splits: GarminSplit[];
   zonas_fc: GarminZonaFc[];
   criado_em: string;
+  analise_texto: string | null;
+  alertas: GarminAlerta[];
+  analisado_em: string | null;
 }
