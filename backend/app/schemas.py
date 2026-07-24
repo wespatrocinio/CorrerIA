@@ -1,4 +1,4 @@
-from datetime import date
+from datetime import date, datetime
 from typing import List, Optional
 
 from pydantic import BaseModel
@@ -183,3 +183,45 @@ class SemanaDetalhe(BaseModel):
     volume_planejado_km: float
     volume_planejado_min: float
     volume_realizado_km: float
+
+
+# --- Garmin ---
+
+class GarminUrlRequest(BaseModel):
+    url: str
+
+
+class GarminSplitOutput(BaseModel):
+    tipo: str
+    distancia_km: float
+    fc_media: Optional[float] = None
+    cadencia_media: Optional[float] = None
+    passada_cm: Optional[float] = None
+    elevacao_ganho_m: Optional[float] = None
+
+
+class GarminZonaFcOutput(BaseModel):
+    zona: int
+    limite_inferior_bpm: int
+    minutos: float
+
+
+class ExecucaoGarminOutput(BaseModel):
+    id: str
+    treino_id: str
+    url: str
+    nome_atividade: Optional[str] = None
+    tipo_atividade: Optional[str] = None
+    distancia_km: Optional[float] = None
+    duracao_min: Optional[float] = None
+    ritmo_medio_min_km: Optional[float] = None
+    fc_media: Optional[float] = None
+    fc_maxima: Optional[float] = None
+    cadencia_media: Optional[float] = None
+    cadencia_maxima: Optional[float] = None
+    passada_cm: Optional[float] = None
+    elevacao_ganho_m: Optional[float] = None
+    elevacao_perda_m: Optional[float] = None
+    splits: List[GarminSplitOutput] = []
+    zonas_fc: List[GarminZonaFcOutput] = []
+    criado_em: datetime

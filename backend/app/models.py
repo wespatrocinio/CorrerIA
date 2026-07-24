@@ -95,3 +95,33 @@ class Bloco(SQLModel, table=True):
     intensidade: Optional[str] = None
     intensidade_congelada: Optional[str] = None
     repeticoes: Optional[int] = None  # só preenchido se tipo == repeticao
+
+
+class ExecucaoGarmin(SQLModel, table=True):
+    """Dados de uma atividade do Garmin Connect associados a um treino realizado.
+
+    Extraídos de uma URL pública de atividade (sem login/credenciais) — ver
+    app/garmin.py. Agregados guardados como colunas próprias pra comparação
+    fácil; splits e zonas de FC ficam como JSON serializado (listas de
+    tamanho variável, sem necessidade de tabelas próprias por ora).
+    """
+    id: str = Field(default_factory=gen_uuid, primary_key=True)
+    treino_id: str = Field(foreign_key="treino.id", unique=True, index=True)
+    url: str
+    activity_id: str
+    nome_atividade: Optional[str] = None
+    tipo_atividade: Optional[str] = None
+    distancia_km: Optional[float] = None
+    duracao_min: Optional[float] = None
+    ritmo_medio_min_km: Optional[float] = None
+    fc_media: Optional[float] = None
+    fc_maxima: Optional[float] = None
+    cadencia_media: Optional[float] = None
+    cadencia_maxima: Optional[float] = None
+    passada_cm: Optional[float] = None
+    elevacao_ganho_m: Optional[float] = None
+    elevacao_perda_m: Optional[float] = None
+    splits_json: Optional[str] = None
+    zonas_fc_json: Optional[str] = None
+    clima_json: Optional[str] = None
+    criado_em: datetime = Field(default_factory=datetime.utcnow)
