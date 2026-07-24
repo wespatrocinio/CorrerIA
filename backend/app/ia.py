@@ -14,7 +14,7 @@ from google import genai
 from .logic import faixa_do_corredor, total_treino
 from .models import Bloco, Corredor, ExecucaoGarmin, Treino
 
-_MODEL = os.environ.get("CORRERIA_IA_MODEL", "gemini-2.5-flash-lite")
+_MODEL = os.environ.get("CORRERIA_IA_MODEL", "gemini-3.5-flash-lite")
 
 
 def _nivel_dominante(blocos: List[Bloco]) -> Optional[str]:
