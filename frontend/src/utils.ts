@@ -82,6 +82,12 @@ export function calcularIntervalo(paceMinPorKm: string): { min: string; max: str
   return { min: formatar(totalSeg - 10), max: formatar(totalSeg + 10) };
 }
 
+export function formatarPaceDecimal(minPorKm: number): string {
+  const min = Math.floor(minPorKm);
+  const seg = Math.round((minPorKm - min) * 60);
+  return `${min}:${String(seg).padStart(2, '0')}/km`;
+}
+
 export function paceParaVelocidade(paceMinPorKm: string): string {
   const [m, s] = paceMinPorKm.split(':').map(Number);
   const totalMin = m + s / 60;

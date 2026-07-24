@@ -384,3 +384,44 @@ select.input-select {
   margin-bottom: 12px;
 }
 .secao-observacoes-view p, .secao-realizacao-view p { margin: 6px 0 0; color: var(--cor-texto-suave); font-size: 14px; }
+
+/* Garmin */
+.secao-garmin {
+  background: var(--cor-cartao);
+  border: 1px solid var(--cor-borda);
+  border-radius: 10px;
+  padding: 16px;
+  margin-bottom: 16px;
+  text-align: left;
+}
+.secao-garmin form { margin-top: 8px; }
+.nome-atividade-garmin { color: var(--cor-texto-suave); font-size: 13px; margin: -4px 0 12px; }
+.comparacao-garmin { display: flex; gap: 12px; margin-bottom: 8px; }
+.comparacao-garmin-coluna {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: var(--cor-fundo);
+  border-radius: 10px;
+  padding: 12px;
+}
+.grade-metricas-garmin {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin: 14px 0;
+}
+.metrica-garmin { display: flex; flex-direction: column; gap: 2px; font-size: 14px; font-weight: 600; }
+.metrica-garmin .rotulo-volume { font-weight: 400; }
+.zonas-fc, .splits-garmin { margin-top: 14px; }
+.zona-fc-linha, .split-garmin-linha {
+  display: flex;
+  justify-content: space-between;
+  font-size: 13px;
+  color: var(--cor-texto-suave);
+  padding: 6px 0;
+  border-bottom: 1px dashed var(--cor-borda);
+}
+.zona-fc-linha:last-child, .split-garmin-linha:last-child { border-bottom: none; }
+.secao-garmin .btn-link { display: inline-block; margin: 10px 0; }

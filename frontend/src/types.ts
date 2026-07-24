@@ -96,3 +96,39 @@ export interface SemanaDetalhe {
   volume_planejado_min: number;
   volume_realizado_km: number;
 }
+
+export interface GarminSplit {
+  tipo: string;
+  distancia_km: number;
+  fc_media: number | null;
+  cadencia_media: number | null;
+  passada_cm: number | null;
+  elevacao_ganho_m: number | null;
+}
+
+export interface GarminZonaFc {
+  zona: number;
+  limite_inferior_bpm: number;
+  minutos: number;
+}
+
+export interface ExecucaoGarmin {
+  id: string;
+  treino_id: string;
+  url: string;
+  nome_atividade: string | null;
+  tipo_atividade: string | null;
+  distancia_km: number | null;
+  duracao_min: number | null;
+  ritmo_medio_min_km: number | null;
+  fc_media: number | null;
+  fc_maxima: number | null;
+  cadencia_media: number | null;
+  cadencia_maxima: number | null;
+  passada_cm: number | null;
+  elevacao_ganho_m: number | null;
+  elevacao_perda_m: number | null;
+  splits: GarminSplit[];
+  zonas_fc: GarminZonaFc[];
+  criado_em: string;
+}
