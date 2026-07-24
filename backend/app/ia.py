@@ -9,12 +9,12 @@ import json
 import os
 from typing import Dict, List, Optional
 
-import anthropic
+from google import genai
 
 from .logic import faixa_do_corredor, total_treino
 from .models import Bloco, Corredor, ExecucaoGarmin, Treino
 
-_MODEL = os.environ.get("CORRERIA_IA_MODEL", "claude-opus-4-8")
+_MODEL = os.environ.get("CORRERIA_IA_MODEL", "gemini-2.5-flash-lite")
 
 
 def _nivel_dominante(blocos: List[Bloco]) -> Optional[str]:
@@ -120,12 +120,7 @@ def gerar_analise(corredor: Corredor, treino: Treino, blocos: List[Bloco], execu
     alertas = gerar_alertas(corredor, blocos, execucao)
     prompt = _montar_prompt(corredor, treino, blocos, execucao, alertas)
 
-    client = anthropic.Anthropic()  # usa ANTHROPIC_API_KEY do ambiente
-    resposta = client.messages.create(
-        model=_MODEL,
-        max_tokens=600,
-        messages=[{"role": "user", "content": prompt}],
-    )
-    texto = next((b.text for b in resposta.content if b.type == "text"), "")
+    client = genai.Client()  # usa GEMINI_API_KEY (ou GOOGLE_API_KEY) do ambiente
+    resposta = client.models.generate_content(model=_MODEL, contents=prompt)
 
-    return {"analise_texto": texto, "alertas": alertas}
+    return {"analise_texto": resposta.text, "alertas": alertas}
