@@ -46,7 +46,13 @@ def buscar_atividade(url: str) -> dict:
     resultado: dict = {}
 
     with sync_playwright() as p:
-        navegador = p.chromium.launch(headless=True)
+        # --no-sandbox e --disable-dev-shm-usage: sem eles o Chromium tende a
+        # falhar em containers (sandbox restrito / partição /dev/shm pequena),
+        # caso comum em ambientes como o da Railway.
+        navegador = p.chromium.launch(
+            headless=True,
+            args=["--no-sandbox", "--disable-dev-shm-usage"],
+        )
         try:
             pagina = navegador.new_page()
 
