@@ -2,9 +2,6 @@
   "$schema": "https://schema.railpack.com",
   "provider": "python",
   "steps": {
-    "install": {
-      "commands": ["pip install -r requirements.txt"]
-    },
     "playwright": {
       "inputs": [{ "step": "install" }],
       "commands": [
