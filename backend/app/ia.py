@@ -16,6 +16,10 @@ from .models import Bloco, Corredor, ExecucaoGarmin, Treino
 
 _MODEL = os.environ.get("CORRERIA_IA_MODEL", "gemini-3.5-flash-lite")
 
+# Tipos de split que representam corrida de fato (exclui aquecimento/descanso/caminhada) —
+# usados pra derivar progressão de ritmo/FC sem incluir trechos que distorceriam a comparação.
+_TIPOS_CORRIDA = {"RWD_RUN", "INTERVAL_ACTIVE"}
+
 
 def _nivel_dominante(blocos: List[Bloco]) -> Optional[str]:
     """Nível de intensidade mais frequente entre os blocos principais (ignora aquecimento/desaquecimento)."""
@@ -77,6 +81,35 @@ def gerar_alertas(corredor: Corredor, blocos: List[Bloco], execucao: ExecucaoGar
     return alertas
 
 
+def _progressao_splits(splits: List[Dict]) -> Optional[Dict]:
+    """Deriva sinais de progressão (ritmo e FC ao longo do treino) a partir dos splits.
+
+    Calculado aqui, não pela IA — modelos de linguagem não são confiáveis fazendo
+    aritmética/comparação sobre arrays, então entregamos os deltas já prontos.
+    """
+    corridos = [
+        sp for sp in splits
+        if sp.get("splitType") in _TIPOS_CORRIDA and sp.get("averageSpeed") and sp.get("distance")
+    ]
+    if len(corridos) < 2:
+        return None
+
+    paces = [round(1000 / sp["averageSpeed"] / 60, 2) for sp in corridos]
+    progressao: Dict = {
+        "ritmo_primeiro_trecho_min_km": paces[0],
+        "ritmo_ultimo_trecho_min_km": paces[-1],
+        "ritmo_por_trecho_min_km": paces,
+    }
+
+    fcs = [sp["averageHR"] for sp in corridos if sp.get("averageHR")]
+    metade = len(fcs) // 2
+    if len(fcs) >= 2 and metade > 0:
+        progressao["fc_media_primeira_metade_bpm"] = round(sum(fcs[:metade]) / metade, 1)
+        progressao["fc_media_segunda_metade_bpm"] = round(sum(fcs[metade:]) / (len(fcs) - metade), 1)
+
+    return progressao
+
+
 def _montar_prompt(corredor: Corredor, treino: Treino, blocos: List[Bloco], execucao: ExecucaoGarmin,
                     alertas: List[Dict]) -> str:
     km_planejado, min_planejado = total_treino(corredor, blocos)
@@ -97,6 +130,7 @@ def _montar_prompt(corredor: Corredor, treino: Treino, blocos: List[Bloco], exec
             "elevacao_ganho_m": execucao.elevacao_ganho_m,
         },
         "splits": splits,
+        "progressao": _progressao_splits(splits),
         "zonas_fc_segundos": zonas,
         "alertas_detectados": alertas,
     }
@@ -104,14 +138,22 @@ def _montar_prompt(corredor: Corredor, treino: Treino, blocos: List[Bloco], exec
     return (
         "Você é um assistente de análise de corrida. Receba os dados de um treino planejado "
         "e o que foi de fato executado (via Garmin Connect) em JSON. Responda em português, "
-        "em texto corrido (sem markdown, sem listas), com no máximo 3 parágrafos curtos:\n\n"
+        "em texto corrido (sem markdown, sem listas), com no máximo 4 parágrafos curtos:\n\n"
         "1. Compare objetivamente o que foi planejado vs. o que foi realizado (distância, duração, ritmo).\n"
-        "2. Analise os parâmetros da corrida (ritmo, frequência cardíaca, cadência, passada, elevação) — "
-        "aponte o que chama atenção, sem fazer prescrição nem recomendar mudanças de treino.\n"
-        "3. Se houver itens em 'alertas_detectados', explique o risco de cada um em linguagem simples "
+        "2. Se o campo 'progressao' estiver presente (não for null), descreva explicitamente como o ritmo e "
+        "a frequência cardíaca evoluíram AO LONGO do treino — comparando 'ritmo_primeiro_trecho_min_km' com "
+        "'ritmo_ultimo_trecho_min_km' (ficou mais rápido/negative split, mais devagar/positive split, ou "
+        "estável) e 'fc_media_primeira_metade_bpm' com 'fc_media_segunda_metade_bpm' (se a FC subiu bastante "
+        "com o ritmo estável ou mais lento, isso é deriva cardíaca — sinal de fadiga acumulada). Use os "
+        "valores de 'ritmo_por_trecho_min_km' para descrever a consistência entre os trechos. Se 'progressao' "
+        "for null (poucos trechos para comparar), pule este parágrafo.\n"
+        "3. Analise os demais parâmetros (cadência, passada, elevação) — aponte o que chama atenção, sem "
+        "fazer prescrição nem recomendar mudanças de treino.\n"
+        "4. Se houver itens em 'alertas_detectados', explique o risco de cada um em linguagem simples "
         "(ex: risco de lesão por esforço excessivo, fadiga acumulada) — se a lista estiver vazia, diga "
         "que não há divergências significativas.\n\n"
-        "Não invente números que não estão nos dados. Não dê conselhos de treino ou prescrições.\n\n"
+        "Baseie-se SOMENTE nos números presentes nos dados abaixo — não invente valores, e não dê "
+        "conselhos de treino ou prescrições.\n\n"
         f"DADOS:\n{json.dumps(fatos, ensure_ascii=False, indent=2)}"
     )
 
