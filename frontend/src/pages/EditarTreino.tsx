@@ -456,16 +456,6 @@ function SecaoRealizacao({ draft, setDraft }: { draft: Treino; setDraft: (t: Tre
             value={draft.km_realizado ?? ''}
             onChange={(e) => setDraft({ ...draft, km_realizado: e.target.value ? parseFloat(e.target.value) : null })}
           />
-          <label className="rotulo-campo" htmlFor="link-registro">
-            Link do registro — Strava, Garmin Connect etc. (opcional)
-          </label>
-          <input
-            id="link-registro"
-            type="text"
-            placeholder="https://..."
-            value={draft.link_registro ?? ''}
-            onChange={(e) => setDraft({ ...draft, link_registro: e.target.value || null })}
-          />
         </div>
       )}
     </div>

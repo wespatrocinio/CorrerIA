@@ -11,6 +11,7 @@ import {
   formatarMin,
   formatarPaceDecimal,
   labelCategoriaRealizacao,
+  labelSplitGarmin,
   labelTipoBloco,
   textoIntervalo,
 } from '../utils';
@@ -118,13 +119,6 @@ export default function VisualizarTreino() {
             ✅ Realizado{treino.realizacao_categoria ? ` · ${labelCategoriaRealizacao(treino.realizacao_categoria)}` : ''}
           </strong>
           {treino.km_realizado != null && <p>{treino.km_realizado.toFixed(1)} km realizados</p>}
-          {treino.link_registro && (
-            <p>
-              <a href={treino.link_registro} target="_blank" rel="noreferrer">
-                Ver registro
-              </a>
-            </p>
-          )}
         </div>
       )}
 
@@ -329,10 +323,10 @@ function SecaoGarmin({
 
       {execucao.splits.length > 0 && (
         <div className="splits-garmin">
-          <span className="rotulo-campo">Splits</span>
+          <span className="rotulo-campo">Trechos do treino</span>
           {execucao.splits.map((sp, i) => (
             <div key={i} className="split-garmin-linha">
-              <span>{sp.tipo}</span>
+              <span>{labelSplitGarmin(sp.tipo)}</span>
               <span>{sp.distancia_km.toFixed(2)} km</span>
               {sp.fc_media != null && <span>{sp.fc_media.toFixed(0)} bpm</span>}
             </div>

@@ -82,6 +82,21 @@ export function calcularIntervalo(paceMinPorKm: string): { min: string; max: str
   return { min: formatar(totalSeg - 10), max: formatar(totalSeg + 10) };
 }
 
+const LABEL_SPLIT_GARMIN: Record<string, string> = {
+  INTERVAL_WARMUP: 'Aquecimento',
+  INTERVAL_ACTIVE: 'Intervalo ativo',
+  INTERVAL_RECOVERY: 'Recuperação',
+  INTERVAL_REST: 'Descanso',
+  INTERVAL_COOLDOWN: 'Desaquecimento',
+  RWD_RUN: 'Corrida',
+  RWD_WALK: 'Caminhada',
+  RWD_STAND: 'Parado',
+};
+
+export function labelSplitGarmin(tipo: string): string {
+  return LABEL_SPLIT_GARMIN[tipo] ?? tipo;
+}
+
 export function formatarPaceDecimal(minPorKm: number): string {
   const min = Math.floor(minPorKm);
   const seg = Math.round((minPorKm - min) * 60);
