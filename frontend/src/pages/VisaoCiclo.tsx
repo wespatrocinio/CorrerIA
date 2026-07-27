@@ -139,15 +139,11 @@ function CardSemana({
     );
   }
 
-  const clicavel = semana.status !== 'passada';
   const delta = metaVolumeSemanalKm != null ? deltaVolumeSemana(semana.volume_planejado_km, metaVolumeSemanalKm) : null;
   const classeDelta = !delta || Math.abs(delta.diff) < 0.05 ? '' : delta.diff > 0 ? 'delta-positivo' : 'delta-negativo';
 
   return (
-    <div
-      className={`card-semana ${CLASSES_ESTADO[semana.status]} ${clicavel ? 'clicavel' : ''}`}
-      onClick={clicavel ? onClicar : undefined}
-    >
+    <div className={`card-semana ${CLASSES_ESTADO[semana.status]} clicavel`} onClick={onClicar}>
       <div className="card-semana-info">
         <strong>Semana {semana.numero}</strong> {semana.status === 'atual' && <span className="badge-atual">Semana atual</span>}
         <span>{intervaloDatas}</span>

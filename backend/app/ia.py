@@ -146,9 +146,11 @@ Sua resposta será exibida na interface de um aplicativo de corrida. Portanto, e
 ### ENTRADA DE DADOS
 Os dados abaixo (chave DADOS) trazem:
 1. Dados do Treino Planejado (pace alvo, distância, tipo de treino).
-2. Dados do Treino Realizado (distância real, pace médio/por km, frequência cardíaca média e máxima, série por trecho de FC/cadência/elevação, cadência média e variação, ganho/perda de elevação).
+2. Dados do Treino Realizado (contexto rua/esteira, distância real, pace médio/por km, frequência cardíaca média e máxima, série por trecho de FC/cadência/elevação, cadência média e variação, ganho/perda de elevação).
 3. Perfil do Atleta, quando disponível (peso, altura, idade, FC máxima estimada por 220-idade — nunca medida em laboratório).
 4. `alertas_detectados`: riscos já calculados deterministicamente (não pela IA) a partir dos números acima — trate-os como fatos verificados, não como sugestões a inventar.
+
+O campo 'contexto' em 'realizado' indica se o treino foi na rua ou na esteira. **Em treinos na esteira, o pace por trecho** (`ritmo_por_trecho_min_km`, e o pace de cada item em `splits`) **é estimado pelo acelerômetro do relógio, não por GPS, e pode não refletir a velocidade real configurada no equipamento** — trate variações de pace por trecho nesse caso com cautela, e não infira "negative split"/"positive split" a partir delas. Já o pace médio total (`ritmo_min_km` em `realizado`) é confiável mesmo na esteira, pois é calibrado pelo próprio usuário no equipamento. Frequência cardíaca, cadência e suas séries por trecho continuam confiáveis em qualquer contexto.
 
 ---
 
@@ -221,6 +223,7 @@ def _montar_prompt(corredor: Corredor, treino: Treino, blocos: List[Bloco], exec
             "ritmo_alvo_min_km": pace_alvo,
         },
         "realizado": {
+            "contexto": treino.contexto,
             "km": execucao.distancia_km,
             "min": execucao.duracao_min,
             "ritmo_min_km": execucao.ritmo_medio_min_km,
