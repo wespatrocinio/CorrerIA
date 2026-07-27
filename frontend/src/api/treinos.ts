@@ -15,6 +15,7 @@ export interface TreinoUpdateInput {
   link_registro: string | null;
   observacoes: string | null;
   blocos: Bloco[];
+  rota_id: string | null;
 }
 
 export function atualizarTreino(id: string, dados: TreinoUpdateInput) {

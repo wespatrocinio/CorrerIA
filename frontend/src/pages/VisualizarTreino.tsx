@@ -106,6 +106,15 @@ export default function VisualizarTreino() {
         </>
       )}
 
+      {treino.rota && (
+        <div className="secao-rota-view">
+          <span className="rotulo-volume">Rota</span>
+          <span>
+            {treino.rota.nome} · {treino.rota.distancia_total_km.toFixed(2)} km
+          </span>
+        </div>
+      )}
+
       {treino.observacoes && (
         <div className="secao-observacoes-view">
           <strong>Observações</strong>

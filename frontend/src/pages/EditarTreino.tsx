@@ -1,11 +1,12 @@
 import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { obterCorredor } from '../api/corredor';
+import { listarRotas } from '../api/rotas';
 import { obterSemana } from '../api/semanas';
 import { atualizarTreino, criarTreino } from '../api/treinos';
 import { criarBlocosPadrao, novoBlocoCustomizado, TEMPLATES_POR_TIPO } from '../blocos';
 import BarraTopo from '../components/BarraTopo';
-import type { Bloco, CategoriaRealizacao, Corredor, Nivel, StatusTreino, Treino } from '../types';
+import type { Bloco, CategoriaRealizacao, Corredor, Nivel, RotaResumo, StatusTreino, Treino } from '../types';
 import { formatarData, formatarMin, labelTipoBloco, textoIntervalo, totalTreino } from '../utils';
 
 const TIPOS_TREINO = ['Regenerativo', 'Rodagem leve', 'Tempo run', 'Longo', 'Fartlek', 'VO2', 'Customizado', 'Descanso'];
@@ -36,13 +37,15 @@ export default function EditarTreino() {
   const [dataDia, setDataDia] = useState('');
   const [treinoOriginalId, setTreinoOriginalId] = useState<string | null>(null);
   const [draft, setDraft] = useState<Treino | null>(null);
+  const [rotas, setRotas] = useState<RotaResumo[]>([]);
 
   useEffect(() => {
     if (!semanaId || !diaId) return;
     let cancelado = false;
-    Promise.all([obterCorredor(), obterSemana(semanaId)]).then(([corredorRes, semanaRes]) => {
+    Promise.all([obterCorredor(), obterSemana(semanaId), listarRotas()]).then(([corredorRes, semanaRes, rotasRes]) => {
       if (cancelado) return;
       setCorredor(corredorRes);
+      setRotas(rotasRes);
       const dia = semanaRes.dias.find((d) => d.id === diaId);
       setDataDia(dia?.data ?? '');
       if (dia?.treino) {
@@ -71,6 +74,8 @@ export default function EditarTreino() {
       total_km: 0,
       total_min: 0,
       blocos: criarBlocosPadrao(template),
+      rota_id: draft?.rota_id ?? null,
+      rota: draft?.rota ?? null,
     });
   }
 
@@ -102,6 +107,7 @@ export default function EditarTreino() {
         link_registro: draft.link_registro,
         observacoes: draft.observacoes,
         blocos: draft.blocos,
+        rota_id: draft.rota_id,
       });
       navigate(`/ciclo/${cicloId}/semana/${semanaId}/dia/${diaId}`, { replace: true });
     } catch (err) {
@@ -252,6 +258,27 @@ export default function EditarTreino() {
           onChange={(e) => setDraft({ ...draft, observacoes: e.target.value })}
         />
       </div>
+
+      {rotas.length > 0 && (
+        <div className="secao-rota-treino">
+          <label className="rotulo-campo" htmlFor="rota-treino">
+            Rota (opcional)
+          </label>
+          <select
+            id="rota-treino"
+            className="input-select"
+            value={draft.rota_id ?? ''}
+            onChange={(e) => setDraft({ ...draft, rota_id: e.target.value || null })}
+          >
+            <option value="">Nenhuma</option>
+            {rotas.map((r) => (
+              <option key={r.id} value={r.id}>
+                {r.nome} ({r.distancia_total_km.toFixed(2)} km)
+              </option>
+            ))}
+          </select>
+        </div>
+      )}
 
       <SecaoRealizacao draft={draft} setDraft={setDraft} />
 

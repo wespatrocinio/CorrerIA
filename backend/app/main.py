@@ -5,7 +5,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from .database import criar_tabelas
-from .routers import auth, ciclos, corredor, garmin, semanas, treinos
+from .routers import auth, ciclos, corredor, garmin, pontos, rotas, semanas, trechos, treinos
 
 
 @asynccontextmanager
@@ -39,6 +39,9 @@ app.include_router(ciclos.router, prefix="/api/ciclos", tags=["ciclos"])
 app.include_router(semanas.router, prefix="/api/semanas", tags=["semanas"])
 app.include_router(treinos.router, prefix="/api", tags=["treinos"])
 app.include_router(garmin.router, prefix="/api", tags=["garmin"])
+app.include_router(pontos.router, prefix="/api", tags=["rotas"])
+app.include_router(trechos.router, prefix="/api", tags=["rotas"])
+app.include_router(rotas.router, prefix="/api", tags=["rotas"])
 
 
 @app.get("/api/health")

@@ -6,6 +6,7 @@ from ..deps import get_corredor_atual
 from ..logic import duplicar_semana, km_realizado_treino, serializar_blocos, total_treino
 from ..models import Bloco, Ciclo, Corredor, Dia, Objetivo, Semana, Treino
 from ..schemas import DiaOutput, DuplicarSemanaRequest, SemanaDetalhe, TreinoOutput
+from .rotas import rota_resumo
 
 router = APIRouter()
 
@@ -45,6 +46,7 @@ def _serializar_semana_detalhe(session: Session, corredor: Corredor, semana: Sem
                 realizacao_categoria=treino.realizacao_categoria, km_realizado=treino.km_realizado,
                 link_registro=treino.link_registro, observacoes=treino.observacoes,
                 total_km=km, total_min=minutos, blocos=serializar_blocos(blocos),
+                rota_id=treino.rota_id, rota=rota_resumo(session, treino.rota_id),
             )
         dias_output.append(DiaOutput(id=dia.id, data=dia.data, treino=treino_output))
 

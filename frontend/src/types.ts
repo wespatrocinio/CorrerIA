@@ -80,6 +80,42 @@ export interface Treino {
   total_km: number;
   total_min: number;
   blocos: Bloco[];
+  rota_id: string | null;
+  rota: RotaResumo | null;
+}
+
+export interface Ponto {
+  id: string;
+  nome: string;
+}
+
+export interface Trecho {
+  id: string;
+  nome: string | null;
+  distancia_km: number;
+  ponto_partida_id: string;
+  ponto_chegada_id: string;
+  ponto_partida: Ponto;
+  ponto_chegada: Ponto;
+}
+
+export interface RotaTrechoItem {
+  trecho: Trecho;
+  ordem: number;
+  invertido: boolean;
+}
+
+export interface Rota {
+  id: string;
+  nome: string;
+  trechos: RotaTrechoItem[];
+  distancia_total_km: number;
+}
+
+export interface RotaResumo {
+  id: string;
+  nome: string;
+  distancia_total_km: number;
 }
 
 export interface Dia {

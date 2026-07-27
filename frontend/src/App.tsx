@@ -8,6 +8,7 @@ import Conta from './pages/Conta';
 import EditarCiclo from './pages/EditarCiclo';
 import EditarTreino from './pages/EditarTreino';
 import Login from './pages/Login';
+import MinhasRotas from './pages/MinhasRotas';
 import ObjetivoCiclo from './pages/ObjetivoCiclo';
 import Onboarding from './pages/Onboarding';
 import Registro from './pages/Registro';
@@ -32,6 +33,7 @@ export default function App() {
             <Route path="/" element={protegida(<Bootstrap />)} />
             <Route path="/conta" element={protegida(<Conta />)} />
             <Route path="/onboarding" element={protegida(<Onboarding />)} />
+            <Route path="/rotas" element={protegida(<MinhasRotas />)} />
             <Route path="/objetivo-ciclo" element={protegida(<ObjetivoCiclo />)} />
             <Route path="/ciclo/:cicloId" element={protegida(<VisaoCiclo />)} />
             <Route path="/ciclo/:cicloId/editar" element={protegida(<EditarCiclo />)} />

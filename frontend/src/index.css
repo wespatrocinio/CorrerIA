@@ -437,3 +437,57 @@ select.input-select {
 .alerta-ia-media { background: rgba(255, 193, 7, 0.12); border-left-color: #ffc107; }
 .alerta-ia-baixa { background: var(--cor-fundo); }
 .texto-analise-ia { font-size: 14px; color: var(--cor-texto-suave); line-height: 1.5; margin: 8px 0; }
+
+/* Rotas */
+.tela-minhas-rotas { text-align: left; }
+.secao-rotas-cadastro {
+  background: var(--cor-cartao);
+  border: 1px solid var(--cor-borda);
+  border-radius: 10px;
+  padding: 16px;
+  margin-bottom: 16px;
+}
+.texto-vazio { color: var(--cor-texto-suave); font-size: 13px; margin: 4px 0 10px; }
+.lista-chips-removiveis { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 10px; }
+.chip-removivel {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--cor-fundo);
+  border: 1px solid var(--cor-borda);
+  border-radius: 999px;
+  padding: 4px 6px 4px 12px;
+  font-size: 13px;
+}
+.chip-removivel button {
+  background: none;
+  border: none;
+  color: var(--cor-texto-suave);
+  font-size: 16px;
+  line-height: 1;
+  cursor: pointer;
+  padding: 0 4px;
+}
+.form-inline { display: flex; gap: 8px; }
+.form-inline input { flex: 1; }
+.form-trecho, .form-montar-rota { display: flex; flex-direction: column; gap: 10px; margin-top: 10px; }
+.lista-trechos, .lista-rotas, .sequencia-rota { margin-bottom: 10px; }
+.linha-trecho {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  padding: 8px 0;
+  border-bottom: 1px dashed var(--cor-borda);
+}
+.linha-trecho:last-child { border-bottom: none; }
+.distancia-total-rota { font-weight: 600; font-size: 14px; }
+.secao-rota-treino { margin: 14px 0; text-align: left; }
+.secao-rota-view {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  text-align: left;
+  margin: 14px 0;
+}

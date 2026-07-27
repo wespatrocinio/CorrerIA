@@ -6,8 +6,9 @@ from sqlmodel import Session, select
 from ..database import get_session
 from ..deps import get_corredor_atual
 from ..logic import TEMPLATES_POR_TIPO, blocos_input_para_orm, criar_blocos_padrao, serializar_blocos, total_treino
-from ..models import Bloco, Ciclo, Corredor, Dia, Objetivo, Semana, Treino
+from ..models import Bloco, Ciclo, Corredor, Dia, Objetivo, Rota, Semana, Treino
 from ..schemas import TreinoCreateRequest, TreinoOutput, TreinoUpdateRequest
+from .rotas import rota_resumo
 
 router = APIRouter()
 
@@ -32,7 +33,7 @@ def _validar_treino_do_corredor(session: Session, corredor: Corredor, treino_id:
     return treino
 
 
-def _treino_output(corredor: Corredor, treino: Treino, blocos: List[Bloco]) -> TreinoOutput:
+def _treino_output(session: Session, corredor: Corredor, treino: Treino, blocos: List[Bloco]) -> TreinoOutput:
     km, minutos = total_treino(corredor, blocos)
     return TreinoOutput(
         id=treino.id, tipo=treino.tipo, template_estrutural=treino.template_estrutural,
@@ -40,6 +41,7 @@ def _treino_output(corredor: Corredor, treino: Treino, blocos: List[Bloco]) -> T
         realizacao_categoria=treino.realizacao_categoria, km_realizado=treino.km_realizado,
         link_registro=treino.link_registro, observacoes=treino.observacoes,
         total_km=km, total_min=minutos, blocos=serializar_blocos(blocos),
+        rota_id=treino.rota_id, rota=rota_resumo(session, treino.rota_id),
     )
 
 
@@ -69,7 +71,7 @@ def criar_treino(
     session.commit()
     session.refresh(treino)
     blocos_persistidos = session.exec(select(Bloco).where(Bloco.treino_id == treino.id)).all()
-    return _treino_output(corredor, treino, blocos_persistidos)
+    return _treino_output(session, corredor, treino, blocos_persistidos)
 
 
 @router.get("/dias/{dia_id}/treino", response_model=Optional[TreinoOutput])
@@ -81,7 +83,7 @@ def obter_treino_do_dia(
     if not treino:
         return None
     blocos = session.exec(select(Bloco).where(Bloco.treino_id == treino.id)).all()
-    return _treino_output(corredor, treino, blocos)
+    return _treino_output(session, corredor, treino, blocos)
 
 
 @router.put("/treinos/{treino_id}", response_model=TreinoOutput)
@@ -101,6 +103,11 @@ def atualizar_treino(
         session.delete(b)
     session.flush()
 
+    if dados.rota_id:
+        rota = session.get(Rota, dados.rota_id)
+        if not rota or rota.corredor_id != corredor.id:
+            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Rota não encontrada")
+
     treino.tipo = dados.tipo
     treino.template_estrutural = dados.template_estrutural
     treino.contexto = dados.contexto
@@ -109,6 +116,7 @@ def atualizar_treino(
     treino.km_realizado = dados.km_realizado
     treino.link_registro = dados.link_registro
     treino.observacoes = dados.observacoes
+    treino.rota_id = dados.rota_id
     session.add(treino)
 
     for bloco in blocos_input_para_orm(treino.id, dados.blocos, mapa_congelado):
@@ -117,4 +125,4 @@ def atualizar_treino(
     session.commit()
     session.refresh(treino)
     blocos_persistidos = session.exec(select(Bloco).where(Bloco.treino_id == treino.id)).all()
-    return _treino_output(corredor, treino, blocos_persistidos)
+    return _treino_output(session, corredor, treino, blocos_persistidos)

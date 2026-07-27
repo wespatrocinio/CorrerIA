@@ -137,6 +137,58 @@ class BlocoOutput(BaseModel):
 BlocoOutput.model_rebuild()
 
 
+# --- Ponto / Trecho / Rota ---
+
+class PontoInput(BaseModel):
+    nome: str
+
+
+class PontoOutput(PontoInput):
+    id: str
+
+
+class TrechoInput(BaseModel):
+    nome: Optional[str] = None
+    ponto_partida_id: str
+    ponto_chegada_id: str
+    distancia_km: float
+
+
+class TrechoOutput(TrechoInput):
+    id: str
+    ponto_partida: PontoOutput
+    ponto_chegada: PontoOutput
+
+
+class RotaTrechoInput(BaseModel):
+    trecho_id: str
+    invertido: bool = False
+
+
+class RotaTrechoOutput(BaseModel):
+    trecho: TrechoOutput
+    ordem: int
+    invertido: bool
+
+
+class RotaCreateRequest(BaseModel):
+    nome: str
+    trechos: List[RotaTrechoInput] = []
+
+
+class RotaOutput(BaseModel):
+    id: str
+    nome: str
+    trechos: List[RotaTrechoOutput] = []
+    distancia_total_km: float
+
+
+class RotaResumo(BaseModel):
+    id: str
+    nome: str
+    distancia_total_km: float
+
+
 # --- Treino ---
 
 class TreinoCreateRequest(BaseModel):
@@ -153,6 +205,7 @@ class TreinoUpdateRequest(BaseModel):
     link_registro: Optional[str] = None
     observacoes: Optional[str] = None
     blocos: List[BlocoInput] = []
+    rota_id: Optional[str] = None
 
 
 class TreinoOutput(BaseModel):
@@ -168,6 +221,8 @@ class TreinoOutput(BaseModel):
     total_km: float
     total_min: float
     blocos: List[BlocoOutput] = []
+    rota_id: Optional[str] = None
+    rota: Optional[RotaResumo] = None
 
 
 class DiaOutput(BaseModel):

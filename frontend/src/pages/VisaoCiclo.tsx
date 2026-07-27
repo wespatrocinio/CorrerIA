@@ -58,6 +58,7 @@ export default function VisaoCiclo() {
             itens={[
               { label: 'Editar objetivo e ciclo', to: `/ciclo/${cicloId}/editar` },
               { label: 'Editar faixas de ritmo', to: '/onboarding' },
+              { label: 'Minhas rotas', to: '/rotas' },
               { label: 'Minha conta', to: '/conta' },
             ]}
           />

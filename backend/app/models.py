@@ -80,6 +80,7 @@ class Treino(SQLModel, table=True):
     km_realizado: Optional[float] = None
     link_registro: Optional[str] = None
     observacoes: Optional[str] = None
+    rota_id: Optional[str] = Field(default=None, foreign_key="rota.id", index=True)
 
 
 class Bloco(SQLModel, table=True):
@@ -128,3 +129,40 @@ class ExecucaoGarmin(SQLModel, table=True):
     analise_texto: Optional[str] = None
     alertas_json: Optional[str] = None
     analisado_em: Optional[datetime] = None
+
+
+class Ponto(SQLModel, table=True):
+    """Local nomeado e reutilizável (ex: 'Portão 3 do Ibirapuera') — entidade própria,
+    não texto livre, pra que a regra de encadeamento de trechos (chegada de um == partida
+    do próximo) seja uma comparação de ID, nunca sujeita a erro de digitação."""
+    id: str = Field(default_factory=gen_uuid, primary_key=True)
+    corredor_id: str = Field(foreign_key="corredor.id", index=True)
+    nome: str
+
+
+class Trecho(SQLModel, table=True):
+    """Um pedaço de percurso conhecido, com distância aproximada. Direcional (partida -> chegada)
+    como cadastrado, mas pode ser percorrido no sentido inverso ao compor uma rota (ver RotaTrecho.invertido)."""
+    id: str = Field(default_factory=gen_uuid, primary_key=True)
+    corredor_id: str = Field(foreign_key="corredor.id", index=True)
+    nome: Optional[str] = None
+    ponto_partida_id: str = Field(foreign_key="ponto.id", index=True)
+    ponto_chegada_id: str = Field(foreign_key="ponto.id", index=True)
+    distancia_km: float
+
+
+class Rota(SQLModel, table=True):
+    id: str = Field(default_factory=gen_uuid, primary_key=True)
+    corredor_id: str = Field(foreign_key="corredor.id", index=True)
+    nome: str
+    criado_em: datetime = Field(default_factory=datetime.utcnow)
+
+
+class RotaTrecho(SQLModel, table=True):
+    """Junção ordenada rota <-> trecho. `invertido` indica que o trecho é percorrido
+    da chegada pra partida (sentido contrário ao cadastrado)."""
+    id: str = Field(default_factory=gen_uuid, primary_key=True)
+    rota_id: str = Field(foreign_key="rota.id", index=True)
+    trecho_id: str = Field(foreign_key="trecho.id", index=True)
+    ordem: int
+    invertido: bool = False
