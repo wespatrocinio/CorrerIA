@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
+import { IconeMais } from './Icones';
 
 interface ItemMenu {
   label: string;
@@ -28,7 +29,7 @@ export default function MenuAcoes({ itens }: { itens: ItemMenu[] }) {
         aria-label="Mais opções"
         aria-expanded={aberto}
       >
-        ⋮
+        <IconeMais />
       </button>
       {aberto && (
         <div className="menu-acoes-lista">

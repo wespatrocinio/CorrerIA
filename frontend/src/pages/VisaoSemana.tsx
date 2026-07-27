@@ -3,6 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { listarSemanas } from '../api/ciclos';
 import { obterSemana } from '../api/semanas';
 import BarraTopo from '../components/BarraTopo';
+import { IconeCheck, IconeDescanso, IconeEsteira, IconeRua } from '../components/Icones';
 import type { Dia } from '../types';
 import { CATEGORIA_COR, formatarData, formatarMin, labelCategoriaRealizacao, labelDiaSemana } from '../utils';
 
@@ -101,7 +102,7 @@ function LinhaDia({ dia, onClicar }: { dia: Dia; onClicar: () => void }) {
   const treino = dia.treino;
   const corCategoria = CATEGORIA_COR[treino.template_estrutural];
   const ehDescanso = treino.template_estrutural === 'descanso';
-  const iconeContexto = ehDescanso ? '😴' : treino.contexto === 'esteira' ? '🏠' : '🛣️';
+  const IconeContexto = ehDescanso ? IconeDescanso : treino.contexto === 'esteira' ? IconeEsteira : IconeRua;
 
   return (
     <div className="linha-dia clicavel" onClick={onClicar}>
@@ -112,7 +113,7 @@ function LinhaDia({ dia, onClicar }: { dia: Dia; onClicar: () => void }) {
         </div>
         <div className={`linha-dia-tipo ${corCategoria}`}>{treino.tipo}</div>
         <div className="linha-dia-contexto" title={treino.contexto}>
-          {iconeContexto}
+          <IconeContexto />
         </div>
         <div className="linha-dia-totais">
           <span>{treino.total_km.toFixed(1)} km</span>
@@ -136,7 +137,7 @@ function StatusRealizacao({ treino }: { treino: NonNullable<Dia['treino']> }) {
 
   return (
     <div className="linha-dia-status status-realizado">
-      <span>✅ Realizado{categoria ? ` · ${categoria}` : ''}</span>
+      <span><IconeCheck /> Realizado{categoria ? ` · ${categoria}` : ''}</span>
       <span>
         {kmReal.toFixed(1)} km ({deltaTexto})
       </span>

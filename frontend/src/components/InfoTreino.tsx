@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { INFO_TREINOS } from '../content/infoTreinos';
+import { IconeInfo } from './Icones';
 
 export default function InfoTreino({ tipo }: { tipo: string }) {
   const [aberto, setAberto] = useState(false);
@@ -9,7 +10,7 @@ export default function InfoTreino({ tipo }: { tipo: string }) {
   return (
     <div>
       <button type="button" className="btn-info" onClick={() => setAberto((a) => !a)}>
-        ℹ️ {aberto ? 'Ocultar info' : `Sobre ${tipo.toLowerCase()}`}
+        <IconeInfo /> {aberto ? 'Ocultar info' : `Sobre ${tipo.toLowerCase()}`}
       </button>
       {aberto && (
         <div className="painel-info">

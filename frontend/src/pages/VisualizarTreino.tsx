@@ -4,6 +4,7 @@ import { obterCorredor } from '../api/corredor';
 import { analisarComIA, obterExecucaoGarmin, sincronizarGarmin } from '../api/garmin';
 import { obterSemana } from '../api/semanas';
 import BarraTopo from '../components/BarraTopo';
+import { IconeCheck, IconeDescanso, IconeEsteira, IconeRua } from '../components/Icones';
 import InfoTreino from '../components/InfoTreino';
 import type { Bloco, Corredor, Dia, ExecucaoGarmin, Treino } from '../types';
 import {
@@ -65,7 +66,8 @@ export default function VisualizarTreino() {
 
   const treino = dia.treino;
   const ehDescanso = treino.template_estrutural === 'descanso';
-  const iconeContexto = treino.contexto === 'esteira' ? '🏠 Esteira' : '🛣️ Rua';
+  const IconeContexto = treino.contexto === 'esteira' ? IconeEsteira : IconeRua;
+  const labelContexto = treino.contexto === 'esteira' ? 'Esteira' : 'Rua';
   const blocosRaiz = treino.blocos.slice().sort((a, b) => a.ordem - b.ordem);
 
   return (
@@ -76,14 +78,18 @@ export default function VisualizarTreino() {
         <h1>{formatarData(dia.data)}</h1>
         <div className="cabecalho-visualizar-topo">
           <span className="tipo-treino">{treino.tipo}</span>
-          {!ehDescanso && <span className="contexto-treino">{iconeContexto}</span>}
+          {!ehDescanso && (
+            <span className="contexto-treino">
+              <IconeContexto /> {labelContexto}
+            </span>
+          )}
         </div>
         <InfoTreino tipo={treino.tipo} />
       </div>
 
       {ehDescanso ? (
         <div className="card-descanso">
-          <div className="icone-descanso">😴</div>
+          <div className="icone-descanso"><IconeDescanso /></div>
           <strong>Dia de descanso</strong>
           <p className="subtitulo">Sem treino programado para hoje.</p>
         </div>
@@ -125,7 +131,7 @@ export default function VisualizarTreino() {
       {treino.status === 'realizado' && (
         <div className="secao-realizacao-view">
           <strong>
-            ✅ Realizado{treino.realizacao_categoria ? ` · ${labelCategoriaRealizacao(treino.realizacao_categoria)}` : ''}
+            <IconeCheck /> Realizado{treino.realizacao_categoria ? ` · ${labelCategoriaRealizacao(treino.realizacao_categoria)}` : ''}
           </strong>
           {treino.km_realizado != null && <p>{treino.km_realizado.toFixed(1)} km realizados</p>}
         </div>
