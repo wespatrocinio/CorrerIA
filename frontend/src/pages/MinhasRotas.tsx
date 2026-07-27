@@ -370,7 +370,7 @@ function SecaoRotas({
 
           <div className="linha-duracao">
             <select
-              className="input-select"
+              className="input-select select-flex"
               value={candidatoEscolhido}
               onChange={(e) => setCandidatoEscolhido(e.target.value)}
             >

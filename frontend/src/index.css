@@ -471,6 +471,7 @@ select.input-select {
 .form-inline { display: flex; gap: 8px; }
 .form-inline input { flex: 1; min-width: 0; }
 .form-inline .btn, .linha-duracao .btn { width: auto; flex-shrink: 0; margin-top: 0; }
+.linha-duracao select.select-flex { flex: 1; min-width: 0; }
 .form-trecho, .form-montar-rota { display: flex; flex-direction: column; gap: 10px; margin-top: 10px; }
 .lista-trechos, .lista-rotas, .sequencia-rota { margin-bottom: 10px; }
 .linha-trecho {
