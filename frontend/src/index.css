@@ -527,7 +527,7 @@ select.input-select {
 .alerta-ia-alta { background: rgba(255, 92, 122, 0.12); border-left-color: var(--cor-intensidade); }
 .alerta-ia-media { background: rgba(255, 182, 72, 0.12); border-left-color: var(--cor-alerta); }
 .alerta-ia-baixa { background: var(--cor-fundo); }
-.texto-analise-ia { font-size: 14px; color: var(--cor-texto-suave); line-height: 1.5; margin: 8px 0; }
+.texto-analise-ia { font-size: 14px; color: var(--cor-texto-suave); line-height: 1.5; margin: 8px 0; white-space: pre-line; }
 
 /* Rotas */
 .tela-minhas-rotas { text-align: left; }
