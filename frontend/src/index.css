@@ -216,9 +216,10 @@ select.input-select {
 /* Onboarding */
 .lista-faixas { display: flex; flex-direction: column; gap: 12px; }
 .linha-faixa { display: flex; align-items: center; gap: 10px; background: var(--cor-cartao); padding: 12px; border-radius: 10px; border: 1px solid var(--cor-borda); }
-.linha-faixa-info { flex: 1; display: flex; flex-direction: column; text-align: left; }
+.linha-faixa-info { flex: 1; min-width: 0; display: flex; flex-direction: column; text-align: left; }
+.linha-faixa-info strong { overflow-wrap: break-word; }
 .percepcao { font-size: 12px; color: var(--cor-texto-suave); }
-.input-faixa { width: 64px; text-align: center; font-family: var(--fonte-destaque); font-size: 20px; letter-spacing: 0.02em; }
+input.input-faixa { width: 64px; flex: 0 0 64px; text-align: center; font-family: var(--fonte-destaque); font-size: 20px; letter-spacing: 0.02em; }
 .unidade { color: var(--cor-texto-suave); font-size: 13px; }
 
 /* Visão do ciclo */

@@ -6,7 +6,7 @@ import { obterCorredor, salvarCorredor } from '../api/corredor';
 import BarraTopo from '../components/BarraTopo';
 
 interface FaixaConfig {
-  nivel: 'aquecimento_desaquecimento' | 'leve' | 'moderado' | 'forte' | 'muito_forte';
+  nivel: 'aquecimento_desaquecimento' | 'leve' | 'moderado' | 'forte' | 'muito_forte' | 'caminhada_recuperacao';
   label: string;
   percepcao: string;
   referencia: string;
@@ -18,6 +18,7 @@ const FAIXAS: FaixaConfig[] = [
   { nivel: 'moderado', label: 'Moderado', percepcao: 'Consegue conversar em frases completas', referencia: '6:30' },
   { nivel: 'forte', label: 'Forte', percepcao: 'Só consegue frases curtas', referencia: '6:00' },
   { nivel: 'muito_forte', label: 'Muito forte', percepcao: 'Quase não consegue falar', referencia: '5:30' },
+  { nivel: 'caminhada_recuperacao', label: 'Caminhada/Recuperação', percepcao: 'Recuperação entre tiros — caminhada ou trote bem leve', referencia: '10:00' },
 ];
 
 export default function Onboarding() {
@@ -40,6 +41,7 @@ export default function Onboarding() {
           moderado: corredor.faixa_moderado,
           forte: corredor.faixa_forte,
           muito_forte: corredor.faixa_muito_forte,
+          caminhada_recuperacao: corredor.faixa_caminhada_recuperacao,
         });
       })
       .catch((err) => {
@@ -64,6 +66,7 @@ export default function Onboarding() {
         faixa_moderado: valores.moderado,
         faixa_forte: valores.forte,
         faixa_muito_forte: valores.muito_forte,
+        faixa_caminhada_recuperacao: valores.caminhada_recuperacao,
       });
       const ciclos = await listarCiclos();
       if (ciclos.length > 0) {

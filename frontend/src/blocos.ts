@@ -47,7 +47,7 @@ export function criarBlocosPadrao(template: string): Bloco[] {
   if (template === 'aquecimento_loop_desaquecimento') {
     const aquecimento = { ...blocoPadrao('aquecimento', 10, 'min', 'aquecimento_desaquecimento'), ordem: 1 };
     const tiro = { ...blocoPadrao('principal', 1, 'min', 'muito_forte'), ordem: 1 };
-    const recuperacao = { ...blocoPadrao('recuperacao', 1, 'min', 'leve'), ordem: 2 };
+    const recuperacao = { ...blocoPadrao('recuperacao', 1, 'min', 'caminhada_recuperacao'), ordem: 2 };
     const repeticao: Bloco = {
       id: uuid(),
       ordem: 2,

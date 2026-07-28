@@ -81,7 +81,7 @@ def gerar_alertas(corredor: Corredor, blocos: List[Bloco], execucao: ExecucaoGar
                 ),
             })
 
-    if nivel in ("aquecimento_desaquecimento", "leve") and execucao.zonas_fc_json:
+    if nivel in ("aquecimento_desaquecimento", "leve", "caminhada_recuperacao") and execucao.zonas_fc_json:
         zonas = json.loads(execucao.zonas_fc_json)
         total_seg = sum(z["secsInZone"] for z in zonas)
         seg_alta = sum(z["secsInZone"] for z in zonas if z["zoneNumber"] >= 4)

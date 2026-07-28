@@ -34,6 +34,7 @@ class CorredorRequest(BaseModel):
     faixa_moderado: str
     faixa_forte: str
     faixa_muito_forte: str
+    faixa_caminhada_recuperacao: str
 
 
 class CorredorResponse(CorredorRequest):

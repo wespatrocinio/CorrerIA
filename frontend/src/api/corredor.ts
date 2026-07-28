@@ -7,6 +7,7 @@ export interface FaixasInput {
   faixa_moderado: string;
   faixa_forte: string;
   faixa_muito_forte: string;
+  faixa_caminhada_recuperacao: string;
 }
 
 export interface PerfilPessoalInput {

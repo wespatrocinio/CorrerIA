@@ -17,6 +17,7 @@ const NIVEIS_INTENSIDADE: { nivel: Nivel; label: string }[] = [
   { nivel: 'moderado', label: 'Moderado' },
   { nivel: 'forte', label: 'Forte' },
   { nivel: 'muito_forte', label: 'Muito forte' },
+  { nivel: 'caminhada_recuperacao', label: 'Caminhada/Recup.' },
 ];
 
 const CATEGORIAS_REALIZACAO: { valor: CategoriaRealizacao; label: string }[] = [

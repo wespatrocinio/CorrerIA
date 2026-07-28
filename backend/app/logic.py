@@ -30,6 +30,7 @@ CAMPO_FAIXA = {
     "moderado": "faixa_moderado",
     "forte": "faixa_forte",
     "muito_forte": "faixa_muito_forte",
+    "caminhada_recuperacao": "faixa_caminhada_recuperacao",
 }
 
 
@@ -104,7 +105,7 @@ def criar_blocos_padrao(treino_id: str, template: str) -> List[Bloco]:
         aquecimento = _bloco_padrao("aquecimento", 10, "min", "aquecimento_desaquecimento", treino_id, 1)
         repeticao = Bloco(treino_id=treino_id, ordem=2, tipo="repeticao", duracao_valor=0, duracao_unidade="min", repeticoes=6)
         tiro = _bloco_padrao("principal", 1, "min", "muito_forte", treino_id, 1, parent_bloco_id=repeticao.id)
-        recuperacao = _bloco_padrao("recuperacao", 1, "min", "leve", treino_id, 2, parent_bloco_id=repeticao.id)
+        recuperacao = _bloco_padrao("recuperacao", 1, "min", "caminhada_recuperacao", treino_id, 2, parent_bloco_id=repeticao.id)
         desaquecimento = _bloco_padrao("desaquecimento", 10, "min", "aquecimento_desaquecimento", treino_id, 3)
         return [aquecimento, repeticao, tiro, recuperacao, desaquecimento]
 

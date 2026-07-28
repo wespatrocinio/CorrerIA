@@ -25,7 +25,12 @@ def _adicionar_colunas_faltantes():
     """`create_all` só cria tabelas novas — não altera tabelas já existentes.
     Como o schema ainda muda com frequência (sem Alembic por enquanto), aqui
     comparamos as colunas declaradas nos modelos com as colunas reais de cada
-    tabela e adicionamos as que faltarem via ALTER TABLE, sem perder dados."""
+    tabela e adicionamos as que faltarem via ALTER TABLE, sem perder dados.
+
+    Quando o campo do modelo tem um valor padrão escalar (ex: `campo: str = "x"`),
+    incluímos DEFAULT na própria ALTER TABLE — o SQLite então preenche as linhas
+    já existentes com esse valor em vez de deixá-las NULL, o que evitaria erro de
+    validação (campo não-opcional) na primeira leitura depois do deploy."""
     inspector = inspect(engine)
     with engine.begin() as conn:
         for table in SQLModel.metadata.sorted_tables:
@@ -33,7 +38,19 @@ def _adicionar_colunas_faltantes():
             for coluna in table.columns:
                 if coluna.name not in colunas_existentes:
                     tipo_sql = coluna.type.compile(dialect=engine.dialect)
-                    conn.execute(text(f'ALTER TABLE "{table.name}" ADD COLUMN "{coluna.name}" {tipo_sql}'))
+                    default_sql = ""
+                    default = coluna.default
+                    if default is not None and getattr(default, "is_scalar", False):
+                        valor = default.arg
+                        if isinstance(valor, str):
+                            default_sql = " DEFAULT '" + valor.replace("'", "''") + "'"
+                        elif isinstance(valor, bool):
+                            default_sql = f" DEFAULT {1 if valor else 0}"
+                        elif isinstance(valor, (int, float)):
+                            default_sql = f" DEFAULT {valor}"
+                    conn.execute(
+                        text(f'ALTER TABLE "{table.name}" ADD COLUMN "{coluna.name}" {tipo_sql}{default_sql}')
+                    )
 
 
 def get_session():

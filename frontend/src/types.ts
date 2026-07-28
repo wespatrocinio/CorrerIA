@@ -1,6 +1,6 @@
 // Espelha backend/app/schemas.py — mantenha os dois em sincronia.
 
-export type Nivel = 'aquecimento_desaquecimento' | 'leve' | 'moderado' | 'forte' | 'muito_forte';
+export type Nivel = 'aquecimento_desaquecimento' | 'leve' | 'moderado' | 'forte' | 'muito_forte' | 'caminhada_recuperacao';
 
 export interface Corredor {
   id: string;
@@ -9,6 +9,7 @@ export interface Corredor {
   faixa_moderado: string;
   faixa_forte: string;
   faixa_muito_forte: string;
+  faixa_caminhada_recuperacao: string;
   nome: string | null;
   sobrenome: string | null;
   data_nascimento: string | null;

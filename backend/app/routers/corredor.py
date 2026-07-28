@@ -34,6 +34,7 @@ def atualizar_corredor(
         corredor.faixa_moderado = dados.faixa_moderado
         corredor.faixa_forte = dados.faixa_forte
         corredor.faixa_muito_forte = dados.faixa_muito_forte
+        corredor.faixa_caminhada_recuperacao = dados.faixa_caminhada_recuperacao
     else:
         corredor = Corredor(usuario_id=usuario.id, **dados.dict())
 
